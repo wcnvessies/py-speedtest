@@ -1,15 +1,16 @@
+import json
+import os
 import re
 import subprocess
 import time
-import json
+
 import numpy as np
 
-ns = 0
 data = []
 results = []
 amount_of_runs = 10
 
-while ns <= amount_of_runs:
+for ns in range(1, amount_of_runs):
     response = (
         subprocess.Popen(
             "/usr/bin/speedtest --accept-license --accept-gdpr",
@@ -53,12 +54,21 @@ while ns <= amount_of_runs:
         ]
     )
 
-    ns = ns+1
     if ns < amount_of_runs:
         time.sleep(60)
 
-with open("/home/pi/speedtest/data_dump.json", "w") as f:
+with open(
+    os.path.join(
+        os.path.dirname(os.path.abspath("__file__")), "json", "data_dump.json"
+    ),
+    "w",
+) as f:
     json.dump(data, f)
 
-with open("/home/pi/speedtest/results_dump.json", "w") as f:
+with open(
+    os.path.join(
+        os.path.dirname(os.path.abspath("__file__")), "json", "results_dump.json"
+    ),
+    "w",
+) as f:
     json.dump(results, f)
